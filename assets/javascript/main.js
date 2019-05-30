@@ -14,6 +14,8 @@ $(document).ready(function () {
     firebase.initializeApp(firebaseConfig);
     const database = firebase.database();
     // reference schedule
+    $("#inputUpdate").hide();
+
     const input = function () {
         var name = $("#trainName").val();
         var des = $("#trainDes").val();
@@ -47,7 +49,6 @@ $(document).ready(function () {
         input();
         console.log("btn clicked!");
     });
-    $("#inputUpdate").hide();
     var scheduleUpdate = function () {
         //console.log("updated!");
 
