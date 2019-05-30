@@ -68,9 +68,10 @@ $(document).ready(function () {
             var update = $("<button>");
             update.addClass("update");
             update.text("Update");
-            update.attr("data-key", key);
+            //update.attr("data-key", key);
             $(document).on('click', ".update", function() {
                 console.log("Update btn clicked!");  
+                 $(#inputUpdate).css("display", "block");
                 $("#trainName").attr("value", trainName); 
                 $("#trainDes").attr("value", trainDestination);
                 $("#trainFTT").attr("value", trainArrival);
