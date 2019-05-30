@@ -73,7 +73,7 @@ $(document).ready(function () {
             //update.attr("data-key", key);
             $(document).on('click', ".update", function() {
                 console.log("Update btn clicked!");  
-                console.log(trainName, trainDestination, trainArrival, trainFrequency);
+                console.log("Stored Value:  ", trainName, trainDestination, trainArrival, trainFrequency);
                 $("#inputUpdate").show();
                 $("#trainName").attr("value", trainName); 
                 $("#trainDes").attr("value", trainDestination);
