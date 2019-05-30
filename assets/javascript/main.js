@@ -19,11 +19,8 @@ $(document).ready(function () {
         var des = $("#trainDes").val();
         var firstTT = $("#trainFTT").val();
         var freq = $("#trainFreq").val();
-        console.log(freq);
         var next = 1;
-        console.log(next);
         var newEntry = { name: name, des: des, firstTT: firstTT, freq: freq, next: next };
-        console.log(newEntry);
         database.ref().push(newEntry);
         $("#trainName").val(""); // clear input
         $("#trainDes").val("");
@@ -34,8 +31,7 @@ $(document).ready(function () {
         var arrTime = moment(FTT, "hh:mm").add(FRQ * NXT, "minutes")
         var now=moment();
         var difference = arrTime.diff(now, "minutes");
-        console.log(arrTime);
-        console.log(difference);
+
         if (difference === 0) {
             return "DUE";
         } else {
@@ -52,10 +48,11 @@ $(document).ready(function () {
         console.log("btn clicked!");
     });
     var scheduleUpdate = function () {
+        console.log("updated!");
+
         $("#scheduleList > tbody").empty();
         database.ref().on("child_added", function (childSnap) {
-            console.log("updated!");
-
+            var key = childSnap.key;
             var childData = childSnap.val();
             console.log(childData);
             //var itemContainer = $("<div>");
@@ -71,12 +68,12 @@ $(document).ready(function () {
             if (parseInt(trainAway, 10)<=0){
                 console.log(trainName+" next train! ")
                 childData.next++;
-                childSnap.update(childData);
+                database.ref(key).update(childData);
             }
             $("#scheduleList > tbody").append("<tr><td>" + trainName + "</td><td>" + trainDestination + "</td><td>" + trainFrequency + "</td><td>" + trainArrival + "</td><td>" + trainAway + "</td></tr>");
         });
     };
-    setInterval(scheduleUpdate(), 1000);
+    setInterval(scheduleUpdate, 1000);
 
 });
 
