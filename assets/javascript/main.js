@@ -47,6 +47,7 @@ $(document).ready(function () {
         input();
         console.log("btn clicked!");
     });
+    $("#inputUpdate").hide();
     var scheduleUpdate = function () {
         //console.log("updated!");
 
