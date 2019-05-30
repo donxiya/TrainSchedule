@@ -71,7 +71,7 @@ $(document).ready(function () {
             //update.attr("data-key", key);
             $(document).on('click', ".update", function() {
                 console.log("Update btn clicked!");  
-                $(#inputUpdate).show();
+                $("#inputUpdate").show();
                 $("#trainName").attr("value", trainName); 
                 $("#trainDes").attr("value", trainDestination);
                 $("#trainFTT").attr("value", trainArrival);
@@ -87,6 +87,7 @@ $(document).ready(function () {
                     $("#trainDes").val("");
                     $("#trainFTT").val("");
                     $("#trainFreq").val("");
+                    $("#inputUpdate").hide();
                     console.log(childData);
                 });    
             });
