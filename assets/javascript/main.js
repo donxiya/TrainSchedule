@@ -22,7 +22,7 @@ $(document).ready(function () {
         var next = 1;
         var newEntry = { name: name, des: des, firstTT: firstTT, freq: freq, next: next };
         database.ref().push(newEntry);
-        $("#trainName").val(""); // clear input
+        $("#trainName").val(""); 
         $("#trainDes").val("");
         $("#trainFTT").val("");
         $("#trainFreq").val("");
@@ -48,13 +48,13 @@ $(document).ready(function () {
         console.log("btn clicked!");
     });
     var scheduleUpdate = function () {
-        console.log("updated!");
+        //console.log("updated!");
 
         $("#scheduleList > tbody").empty();
         database.ref().on("child_added", function (childSnap) {
             var key = childSnap.key;
             var childData = childSnap.val();
-            console.log(childData);
+            //console.log(childData);
             //var itemContainer = $("<div>");
             //var trainName = $("<div>");
 
@@ -65,12 +65,39 @@ $(document).ready(function () {
             var trainFrequency = childData.freq;
             var trainArrival = moment(childData.firstTT, "hh:mm").add(childData.freq * childData.next, "minutes").calendar();
             var trainAway = minAway(childData.freq, childData.next, childData.firstTT);
+            var update = $("<button>");
+            update.addClass("update");
+            update.text("Update");
+            update.attr("data-key", key);
+            $(document).on('click', ".update", function() {
+                console.log("Update btn clicked!");  
+                $("#trainName").attr("value", trainName); 
+                $("#trainDes").attr("value", trainDestination);
+                $("#trainFTT").attr("value", trainArrival);
+                $("#trainFreq").attr("value", trainFrequency);
+                $("#inputUpdate").on("click", function () {
+                    console.log("Update btn clicked!"); 
+                    childData.name = $("#trainName").val();
+                    childData.des = $("#trainDes").val();
+                    childData.firstTT = $("#trainFTT").val();
+                    childData.freq = $("#trainFreq").val();
+                    database.ref(key).update(childData);
+                    $("#trainName").val(""); 
+                    $("#trainDes").val("");
+                    $("#trainFTT").val("");
+                    $("#trainFreq").val("");
+                    console.log(childData);
+                });    
+            });
+            var remove;
             if (parseInt(trainAway, 10)<=0){
                 console.log(trainName+" next train! ")
                 childData.next++;
                 database.ref(key).update(childData);
+
             }
             $("#scheduleList > tbody").append("<tr><td>" + trainName + "</td><td>" + trainDestination + "</td><td>" + trainFrequency + "</td><td>" + trainArrival + "</td><td>" + trainAway + "</td></tr>");
+            $("#scheduleList > tbody").append(update);
         });
     };
     setInterval(scheduleUpdate, 1000);
