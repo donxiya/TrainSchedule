@@ -1,85 +1,89 @@
 $(document).ready(function () {
-    //var favList = [];
-    var search = null;
-    var newSearch = function () {
-        event.preventDefault();
-        search = $("#game-search").val().trim();
-        //localStorage.clear();
-        //localStorage.setItem("searchlist", JSON.stringify(resultList));
-        $("#game-search").val("");
+    // Your web app's Firebase configuration
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyDzaHDzQVao7jX2_hgIpUr_8nvBbfzTt0g",
+        authDomain: "trainscheduler-115e5.firebaseapp.com",
+        databaseURL: "https://trainscheduler-115e5.firebaseio.com",
+        projectId: "trainscheduler-115e5",
+        storageBucket: "trainscheduler-115e5.appspot.com",
+        messagingSenderId: "123612980120",
+        appId: "1:123612980120:web:8e5380db9de39d34"
     };
-    var searchGame = function (term) {
-        //need to change url
-        var key = "52e79fca4d325c1ee085a289f1703202d6089c8e";
-        var queryURL = "https://www.giantbomb.com/api/search?api_key=" + key + "&format=json&query=" + term + "&resources=game";
-        console.log(queryURL);
-        console.log("test");
-
-        $.ajax({
-            url: "http://api.giantbomb.com/search/",
-            dataType: "jsonp",
-            jsonp: "json_callback",
-            data: {
-                api_key: "52e79fca4d325c1ee085a289f1703202d6089c8e",
-                query: term,
-                format: "jsonp",
-                //we can change searched item here
-                field_list: "name",
-                field_list: "deck",
-                field_list: "original_release_date",
-                field_list: "image",
-                resources: "game",
-            },
-        }).then(function (response) {
-            //test
-            console.log("test success");
-            console.log(response);
-            console.log(response.results[0]);
-        })
-        // .then(function (response) {
-        //     if (response.results != null) {
-        //         for (var i = 0; i < response.results.length; i++) {
-        //             //this div containts everything
-        //             var itemDiv = $("<div>");
-        //             itemDiv.addClass("itemId");
-        //             itemDiv.attr("id", response.data[i].title);
-        //             //this div is image
-        //             var imageBody = $("<img>");
-        //             imageBody.addClass("imageBody");
-        //             imageBody.attr("id", term + i);
-        //             imageBody.attr("src", response.data[i].image);
-        //             var title = $("<div>");
-        //             title.addClass("title");
-        //             title.text(response.data[i].title);
-        //             var description = $("<div>");
-        //             description.addClass("description");
-        //             description.text();
-        //             var rating = $("<div>");
-        //             rating.addClass("rating");
-        //             rating.text(response.data[i].rating);
-        //             var price = $("<div>");
-        //             price.addClass("price");
-        //             price.text(response.data[i].price);
-        //             var linkVideo = $("<div>");
-        //             linkVideo.addClass("linkVideo");
-        //             linkVideo.text("link");
-        //             var linkAmz = $("<div>");
-        //             linkAmz.addClass("linkVideo");
-        //             linkAmz.text("link");
-        //             //gifDiv.append(t);
-        //             $("#resultList").append(gifDiv);
-        //         }
-        //     };
-        // });
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+    // reference schedule
+    const input = function () {
+        var name = $("#trainName").val();
+        var des = $("#trainDes").val();
+        var firstTT = $("#trainFTT").val();
+        var freq = $("#trainFreq").val();
+        console.log(freq);
+        var next = 1;
+        console.log(next);
+        var newEntry = { name: name, des: des, firstTT: firstTT, freq: freq, next: next };
+        console.log(newEntry);
+        database.ref().push(newEntry);
+        $("#trainName").val(""); // clear input
+        $("#trainDes").val("");
+        $("#trainFTT").val("");
+        $("#trainFreq").val("");
     }
-    $("#game-query").on("click", function () {
-        if ($("#game-search").val() != "") {
-            var a = $("#game-search").val();
-            searchGame(a);
-            newSearch();
+    var minAway = function (FRQ, NXT, FTT) {
+        var arrTime = moment(FTT, "hh:mm").add(FRQ * NXT, "minutes")
+        var now=moment();
+        var difference = arrTime.diff(now, "minutes");
+        console.log(arrTime);
+        console.log(difference);
+        if (difference === 0) {
+            return "DUE";
+        } else {
+            return difference;
+        }
+    };
 
-        };
+    var timeUpdate = function () {
+        $("#time").text(moment().format('MMMM Do YYYY, h:mm:ss a'));
+    };
+    setInterval(timeUpdate, 1000);
+    $("#inputSubmit").on("click", function () {
+        input();
+        console.log("btn clicked!");
     });
+    var scheduleUpdate = function () {
+        $("#scheduleList > tbody").empty();
+        database.ref().on("child_added", function (childSnap) {
+            console.log("updated!");
+
+            var childData = childSnap.val();
+            console.log(childData);
+            //var itemContainer = $("<div>");
+            //var trainName = $("<div>");
+
+            var trainName = childData.name;
+            //var trainDestination = $("<div>");
+            var trainDestination = childData.des;
+            //var trainFrequency = $("<div>");
+            var trainFrequency = childData.freq;
+            var trainArrival = moment(childData.firstTT, "hh:mm").add(childData.freq * childData.next, "minutes").calendar();
+            var trainAway = minAway(childData.freq, childData.next, childData.firstTT);
+            if (parseInt(trainAway, 10)<=0){
+                console.log(trainName+" next train! ")
+                childData.next++;
+                childSnap.update(childData);
+            }
+            $("#scheduleList > tbody").append("<tr><td>" + trainName + "</td><td>" + trainDestination + "</td><td>" + trainFrequency + "</td><td>" + trainArrival + "</td><td>" + trainAway + "</td></tr>");
+        });
+    };
+    setInterval(scheduleUpdate(), 1000);
+
 });
+
+
+
+
+
+
 
 

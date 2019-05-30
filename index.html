@@ -6,138 +6,48 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/3.7.5/firebase.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.0.min.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="assets/javascript/main.js"></script>
+    <script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
 </head>
-
 <body>
-
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-12">
-                <!-- Game search box -->
-                <form id="searchBox">
-                    <label for="game-search" class="searchText">Enter a Game</label>
-                    <input type="text" id="game-search">
-                    <input id="game-query" type="submit" value="Search" class="btn btn-primary">
-                </form>
+    <div class="text-center">Train Schedule</div>
+        <div id=time></div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <div class="panel panel-default">
+                <h3>Arrival Times</h3>
             </div>
-        </div>
-        <!-- Game information populates here -->
-        <br>
-        <div class="row" id="game-container">
-            <div class="col-md-3">
-                <div class="table-responsive">
-                    <table class="table">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th scope="col">Info</th>
-                                <th scope="col">Game Name</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <th scope="row">1</th>
-                                <td>Rating</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">2</th>
-                                <td>Info</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">3</th>
-                                <td><a href="https://www.amazon.com">Image</a></td>
-                            </tr>
-                        </tbody>
-                    </table>
+            <div>
+                <table class="table" id="scheduleList">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Destination</th>
+                            <th>Frequency</th>
+                            <th>Next Train</th>
+                            <th>Arrive in</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <br>
+            <form>
+                <div>
+                    <input type="text" id="trainName" placeholder="Train Name">
+                    <input type="text" id="trainDes" placeholder="Destination">
+                    <input type="text" id="trainFTT" placeholder="First Train Time(24:00)">
+                    <input type="text" id="trainFreq" placeholder="Frequency (min)">
+                    <button class="btn" id="inputSubmit" type="button">Submit</button>
                 </div>
-            </div>
-            <div class="col-md-3">
-                <div class="table-responsive">
-                    <table class="table">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th scope="col">Info</th>
-                                <th scope="col">Game Name</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <th scope="row">1</th>
-                                <td>Rating</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">2</th>
-                                <td>Info</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">3</th>
-                                <td><a href="https://www.amazon.com">Image</a></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="table-responsive">
-                    <table class="table">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th scope="col">Info</th>
-                                <th scope="col">Game Name</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <th scope="row">1</th>
-                                <td>Rating</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">2</th>
-                                <td>Info</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">3</th>
-                                <td><a href="https://www.amazon.com">Image</a></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="table-responsive">
-                    <table class="table">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th scope="col">Info</th>
-                                <th scope="col">Game Name</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <th scope="row">1</th>
-                                <td>Rating</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">2</th>
-                                <td>Info</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">3</th>
-                                <td><a href="https://www.amazon.com">Image</a></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+            </form>
         </div>
     </div>
 </body>
-
-<script src="assets/javascript/app.js"></script>
-
 </html>
