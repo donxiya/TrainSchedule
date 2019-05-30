@@ -71,7 +71,7 @@ $(document).ready(function () {
             //update.attr("data-key", key);
             $(document).on('click', ".update", function() {
                 console.log("Update btn clicked!");  
-                 $(#inputUpdate).css("display", "block");
+                $(#inputUpdate).show();
                 $("#trainName").attr("value", trainName); 
                 $("#trainDes").attr("value", trainDestination);
                 $("#trainFTT").attr("value", trainArrival);
