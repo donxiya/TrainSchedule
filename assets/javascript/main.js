@@ -85,10 +85,10 @@ $(document).ready(function () {
                     childData.firstTT = $("#trainFTT").val();
                     childData.freq = $("#trainFreq").val();
                     database.ref(key).update(childData);
-                    $("#trainName").val(""); 
-                    $("#trainDes").val("");
-                    $("#trainFTT").val("");
-                    $("#trainFreq").val("");
+                    //$("#trainName").val(""); 
+                    //$("#trainDes").val("");
+                    //$("#trainFTT").val("");
+                    //$("#trainFreq").val("");
                     $("#inputUpdate").hide();
                     console.log(childData);
                 });    
