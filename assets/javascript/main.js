@@ -10,10 +10,11 @@ $(document).ready(function () {
         messagingSenderId: "123612980120",
         appId: "1:123612980120:web:8e5380db9de39d34"
     };
-    // Initialize Firebase
+
     firebase.initializeApp(firebaseConfig);
     const database = firebase.database();
-    // reference schedule
+
+    
     $("#inputUpdate").hide();
 
     const input = function () {
@@ -49,37 +50,29 @@ $(document).ready(function () {
         input();
     });
     var scheduleUpdate = function () {
-        //console.log("updated!");
 
         $("#scheduleList > tbody").empty();
         database.ref().on("child_added", function (childSnap) {
             var key = childSnap.key;
             var childData = childSnap.val();
 
-            //console.log(childData);
-            //var itemContainer = $("<div>");
-            //var trainName = $("<div>");
+ 
 
             var trainName = childData.name;
-            //var trainDestination = $("<div>");
             var trainDestination = childData.des;
-            //var trainFrequency = $("<div>");
             var trainFrequency = childData.freq;
             var trainArrival = moment(childData.firstTT, "hh:mm").add(childData.freq * childData.next, "minutes").calendar();
             var trainAway = minAway(childData.freq, childData.next, childData.firstTT);
             var update = $("<button>");
             update.addClass("update");
             update.text("Update");
-            //update.attr("data-key", key);
             $(document).on('click', ".update", function () {
-                console.log("Update btn clicked!");
                 $("#inputUpdate").show();
                 $("#trainName").attr("value", trainName);
                 $("#trainDes").attr("value", trainDestination);
                 $("#trainFTT").attr("value", trainArrival);
                 $("#trainFreq").attr("value", trainFrequency);
                 $("#inputUpdate").on("click", function () {
-                    console.log("Update btn clicked!");
                     childData.name = $("#trainName").val();
                     childData.des = $("#trainDes").val();
                     childData.firstTT = $("#trainFTT").val();
@@ -90,7 +83,6 @@ $(document).ready(function () {
                     $("#trainFTT").val("");
                     $("#trainFreq").val("");
                     $("#inputUpdate").hide();
-                    console.log(childData);
                 });
             });
             var remove = $("<button>");
@@ -99,20 +91,12 @@ $(document).ready(function () {
             remove.text("Remove");
             $(document).on('click', ".remove", function () {
                 var a = $(this).attr("data-id");
-                 console.log("Key:  "+a);
                  database.ref(a).remove();
             });
 
-            // if (parseInt(trainAway, 10) <= 0) {
-            //     //console.log(trainName + " next train! ")
-            //     childData.next++;
-            //     database.ref(key).update(childData);
-
-            // }
             $("#scheduleList > tbody").append("<tr><td>" + trainName + "</td><td>" + trainDestination + "</td><td>" + trainFrequency + "</td><td>" + trainArrival + "</td><td>" + trainAway + "</td></tr>");
             $("#scheduleList > tbody").append(update);
             $("#scheduleList > tbody").append(remove);
-            //console.log("Stored Value:  ", trainName, trainDestination, trainArrival, trainFrequency);
         });
     };
     setInterval(scheduleUpdate, 1000);
