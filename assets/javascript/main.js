@@ -42,12 +42,11 @@ $(document).ready(function () {
     };
 
     var timeUpdate = function () {
-        $("#time").text(moment().format('MMMM Do YYYY, h:mm:ss a'));
+        $("#time").text("Current Time: "+moment().format('MMMM Do YYYY, h:mm:ss a'));
     };
     setInterval(timeUpdate, 1000);
     $("#inputSubmit").on("click", function () {
         input();
-        console.log("btn clicked!");
     });
     var scheduleUpdate = function () {
         //console.log("updated!");
@@ -56,6 +55,7 @@ $(document).ready(function () {
         database.ref().on("child_added", function (childSnap) {
             var key = childSnap.key;
             var childData = childSnap.val();
+
             //console.log(childData);
             //var itemContainer = $("<div>");
             //var trainName = $("<div>");
@@ -73,7 +73,6 @@ $(document).ready(function () {
             //update.attr("data-key", key);
             $(document).on('click', ".update", function () {
                 console.log("Update btn clicked!");
-                console.log("Stored Value:  ", trainName, trainDestination, trainArrival, trainFrequency);
                 $("#inputUpdate").show();
                 $("#trainName").attr("value", trainName);
                 $("#trainDes").attr("value", trainDestination);
@@ -94,24 +93,26 @@ $(document).ready(function () {
                     console.log(childData);
                 });
             });
-            // var remove = $("<button>");
-            // remove.addClass("remove");
-            // remove.text("Remove");
-            // //update.attr("data-key", key);
-            // $(document).on('click', ".remove", function () {
-            //     var key = childSnap.key;
-            //     console.log("Stored Value:  ", trainName, trainDestination,trainArrival, trainFrequency);
-            //     database.ref(key).remove();
-            // });
-            if (parseInt(trainAway, 10) <= 0) {
-                console.log(trainName + " next train! ")
-                childData.next++;
-                database.ref(key).update(childData);
+            var remove = $("<button>");
+            remove.addClass("remove");
+            remove.attr("data-id", key);
+            remove.text("Remove");
+            $(document).on('click', ".remove", function () {
+                var a = $(this).attr("data-id");
+                 console.log("Key:  "+a);
+                 database.ref(a).remove();
+            });
 
-            }
+            // if (parseInt(trainAway, 10) <= 0) {
+            //     //console.log(trainName + " next train! ")
+            //     childData.next++;
+            //     database.ref(key).update(childData);
+
+            // }
             $("#scheduleList > tbody").append("<tr><td>" + trainName + "</td><td>" + trainDestination + "</td><td>" + trainFrequency + "</td><td>" + trainArrival + "</td><td>" + trainAway + "</td></tr>");
             $("#scheduleList > tbody").append(update);
-            //$("#scheduleList > tbody").append(remove);
+            $("#scheduleList > tbody").append(remove);
+            //console.log("Stored Value:  ", trainName, trainDestination, trainArrival, trainFrequency);
         });
     };
     setInterval(scheduleUpdate, 1000);
